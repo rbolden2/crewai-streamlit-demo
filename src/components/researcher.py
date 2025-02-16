@@ -4,6 +4,7 @@ from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 from exa_py import Exa
 import requests
+import streamlit as st
 import os
 
 #--------------------------------#
@@ -22,7 +23,7 @@ class EXAAnswerTool(BaseTool):
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "x-api-key": os.getenv("EXA_API_KEY")
+            "x-api-key": st.secrets["EXA_API_KEY"]
         }
         
         try:
@@ -75,7 +76,7 @@ def create_researcher(selection):
     
     if provider == "GROQ":
         llm = LLM(
-            api_key=os.getenv("GROQ_API_KEY"),
+            api_key=st.secrets["GROQ_API_KEY"],
             model=f"groq/{model}"
         )
     elif provider == "Ollama":
@@ -99,7 +100,7 @@ def create_researcher(selection):
         if not model:
             model = "o1"
         llm = LLM(
-            api_key=os.getenv("OPENAI_API_KEY"),
+            api_key=st.secrets["OPENAI_API_KEY"],
             model=f"openai/{model}"
         )
     

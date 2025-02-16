@@ -5,18 +5,6 @@ import requests
 #--------------------------------#
 #      Ollama Integration        #
 #--------------------------------#
-def is_ollama_available():
-    """Check if Ollama is available by attempting to connect to its API.
-    
-    Returns:
-        bool: True if Ollama is running and accessible, False otherwise
-    """
-    try:
-        response = requests.get("http://localhost:11434/api/tags", timeout=1)
-        return response.status_code == 200
-    except:
-        return False
-
 def get_ollama_models():
     """Get list of available Ollama models from local instance.
     
@@ -50,21 +38,11 @@ def render_sidebar():
         st.markdown("### ⚙️ Configuration")
         st.write("")
         with st.expander("🤖 Model Selection", expanded=True):
-            # Show message if not running locally
-            ollama_available = is_ollama_available()
-            if not ollama_available:
-                st.info("⚠️ Ollama is not available. Make sure it's running locally if you want to use it.")
-            
             provider = st.radio(
                 "Select LLM Provider",
-                ["OpenAI", "GROQ", "Ollama"] if ollama_available else ["OpenAI", "GROQ"],
+                ["OpenAI", "GROQ", "Ollama"],
                 help="Choose which Large Language Model provider to use",
-                horizontal=True,
-                captions=[
-                    "Reliable performance",
-                    "Ultra-fast inference",
-                    "Local deployment" if ollama_available else None
-                ][:2] if not ollama_available else None
+                horizontal=True
             )
             
             if provider == "OpenAI":
@@ -117,7 +95,7 @@ def render_sidebar():
                     help="Enter your OpenAI API key"
                 )
                 if openai_api_key:
-                    os.environ["OPENAI_API_KEY"] = openai_api_key
+                    st.secrets["OPENAI_API_KEY"] = openai_api_key
             elif provider == "GROQ":
                 groq_api_key = st.text_input(
                     "GROQ API Key",
@@ -126,7 +104,7 @@ def render_sidebar():
                     help="Enter your GROQ API key"
                 )
                 if groq_api_key:
-                    os.environ["GROQ_API_KEY"] = groq_api_key
+                    st.secrets["GROQ_API_KEY"] = groq_api_key
             
             # Only show EXA key input if not using Ollama
             if provider != "Ollama":
@@ -137,7 +115,7 @@ def render_sidebar():
                     help="Enter your EXA API key for web search capabilities"
                 )
                 if exa_api_key:
-                    os.environ["EXA_API_KEY"] = exa_api_key
+                    st.secrets["EXA_API_KEY"] = exa_api_key
 
         st.write("")
         with st.expander("ℹ️ About", expanded=False):
