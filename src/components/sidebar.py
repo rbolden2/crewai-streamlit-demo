@@ -91,31 +91,31 @@ def render_sidebar():
                 openai_api_key = st.text_input(
                     "OpenAI API Key",
                     type="password",
-                    value=os.getenv("OPENAI_API_KEY"),
+                    placeholder="Enter your OpenAI API key",
                     help="Enter your OpenAI API key"
                 )
                 if openai_api_key:
-                    st.secrets["OPENAI_API_KEY"] = openai_api_key
+                    os.environ["OPENAI_API_KEY"] = openai_api_key
             elif provider == "GROQ":
                 groq_api_key = st.text_input(
                     "GROQ API Key",
                     type="password",
-                    value=os.getenv("GROQ_API_KEY"),
+                    placeholder="Enter your GROQ API key",
                     help="Enter your GROQ API key"
                 )
                 if groq_api_key:
-                    st.secrets["GROQ_API_KEY"] = groq_api_key
+                    os.environ["GROQ_API_KEY"] = groq_api_key
             
             # Only show EXA key input if not using Ollama
             if provider != "Ollama":
                 exa_api_key = st.text_input(
                     "EXA API Key",
                     type="password",
-                    value=os.getenv("EXA_API_KEY"),
+                    placeholder="Enter your EXA API key",
                     help="Enter your EXA API key for web search capabilities"
                 )
                 if exa_api_key:
-                    st.secrets["EXA_API_KEY"] = exa_api_key
+                    os.environ["EXA_API_KEY"] = exa_api_key
 
         st.write("")
         with st.expander("ℹ️ About", expanded=False):

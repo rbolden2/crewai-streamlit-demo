@@ -34,12 +34,21 @@ with col2:
 # Render sidebar and get selection (provider and model)
 selection = render_sidebar()
 
-# Check if API keys are set
-if ((selection["provider"] == "OpenAI" and not os.getenv("OPENAI_API_KEY")) or \
-    (selection["provider"] == "GROQ" and not os.getenv("GROQ_API_KEY")) or \
-    (selection["provider"] != "Ollama" and not os.getenv("EXA_API_KEY"))):
-    st.warning("⚠️ Please enter your API keys in the sidebar to get started")
-    st.stop()
+# Check if API keys are set based on provider
+if selection["provider"] == "OpenAI":
+    if not os.environ.get("OPENAI_API_KEY"):
+        st.warning("⚠️ Please enter your OpenAI API key in the sidebar to get started")
+        st.stop()
+elif selection["provider"] == "GROQ":
+    if not os.environ.get("GROQ_API_KEY"):
+        st.warning("⚠️ Please enter your GROQ API key in the sidebar to get started")
+        st.stop()
+
+# Check EXA key for non-Ollama providers
+if selection["provider"] != "Ollama":
+    if not os.environ.get("EXA_API_KEY"):
+        st.warning("⚠️ Please enter your EXA API key in the sidebar to get started")
+        st.stop()
 
 # Add Ollama check
 if selection["provider"] == "Ollama" and not selection["model"]:
