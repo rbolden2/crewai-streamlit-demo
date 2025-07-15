@@ -111,7 +111,7 @@ def create_researcher(selection):
         backstory='Expert at analyzing and summarizing complex information',
         tools=[EXAAnswerTool()],
         llm=llm,
-        max_rpm=300,
+        max_rpm=150,
         verbose=True,
         allow_delegation=False,  # Disable delegation to avoid caching
     )
